@@ -21,6 +21,7 @@
   </div>
 </template>
 <script>
+import store from '@/store'
 export default {
   data () {
     var checkLogin = (rules, value, callback) => {
@@ -30,8 +31,8 @@ export default {
 
     return {
       loginForm: {
-        mobile: '',
-        code: ''
+        mobile: '13911111111',
+        code: '246810'
       },
       loginRules: {
         mobile: [
@@ -49,11 +50,13 @@ export default {
     submitForm () {
       this.$refs.loginForm.validate(valid => {
         valid &&
-        this.$http.post('http://ttapi.research.itcast.cn/mp/v1_0/authorizations', this.loginForm)
+        this.$http.post('authorizations', this.loginForm)
           .then(res => {
+            store.setUser(res.data.data)
             this.$router.push('/')
           })
           .catch(() => {
+            // console.log(err)
             this.$message.error('Mob or code wrong')
           })
       })
